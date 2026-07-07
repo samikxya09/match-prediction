@@ -7,6 +7,7 @@ function Team() {
   const [captain, setCaptain] = useState("");
   const [coach, setCoach] = useState("");
   const [teams, setTeams] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   async function sendTeamData(event) 
   {
@@ -26,9 +27,35 @@ async function fetchTeams() {
 
   setTeams(response.data.data); // in backend it is use as teamname:teamname so object should look like this so data.data
 }
+
+
+//delete
+async function deleteTeam(id) {
+  await axios.delete(`http://localhost:3000/delete-team/${id}`); //await=Wait until the backend finishes deleting the team.
+
+  fetchTeams();  //dekhauxa feri delete vaye paxi 
+}
+
+
+
+//update
+function editTeam(team){
+   setName(team.teamname);
+  setCaptain(team.teamcaptain);
+  setCoach(team.teamcoach);
+
+  setEditingId(team.id);
+}
+
+
+
+
 useEffect(() => {
   fetchTeams();
 }, []);
+
+
+
   return (
     <>
       <Navbar />
@@ -100,6 +127,22 @@ useEffect(() => {
             </div>
 
           </div>
+
+          
+<button
+  onClick={() => editTeam(team)}
+  className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+>
+  Edit
+</button>
+              <button
+      onClick={() => deleteTeam(team.id)}
+      className="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+      Delete
+    </button>
+
+
+          
         </div>
       ))}
 
@@ -110,6 +153,6 @@ useEffect(() => {
                
     </>
   );
-}
 
+}
 export default Team;
