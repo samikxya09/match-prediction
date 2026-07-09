@@ -33,16 +33,18 @@ async function fetchTeams() {
 async function deleteTeam(id) {
   await axios.delete(`http://localhost:3000/delete-team/${id}`); //await=Wait until the backend finishes deleting the team.
 
-  fetchTeams();  //dekhauxa feri delete vaye paxi 
+  fetchTeams();  //after deleting it will show again
 }
 
 
 
 //update
-function editTeam(team){
-   setName(team.teamname);
-  setCaptain(team.teamcaptain);
-  setCoach(team.teamcoach);
+function editTeam(team) {
+  console.log(team);
+
+  setName(team.teamname || "");
+  setCaptain(team.teamcaptain || "");
+  setCoach(team.teamcoach || "");
 
   setEditingId(team.id);
 }
@@ -61,12 +63,15 @@ useEffect(() => {
       <Navbar />
 
       <form onSubmit={sendTeamData}>
-        <input
-          type="text"
-          placeholder="Team Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      <input
+  type="text"
+  placeholder="Team Name"
+  value={name ?? ""}
+  onChange={(e) => {
+    console.log(e.target.value);
+    setName(e.target.value);
+  }}
+/>
 
         <input
           type="text"
